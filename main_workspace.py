@@ -12,12 +12,12 @@ opt       = tf.optimizers.Adam(learning_rate=1e-3)
 activation= tf.math.tanh
 
 #Training with skip connections
-skip = 10
+skip = int(sys.argv[1])
 allcosts = []
 allpens = []
 
 for i in range(10):
-    ratio = 0.99-0.11*i
+    ratio = 0.11*i
     iterations = 5000
     costs,penalties = train(constants,tv,task,activation,opt,skip,ratio,iterations,N_models)
     allcosts.append(costs)
