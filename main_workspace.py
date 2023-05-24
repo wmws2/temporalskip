@@ -1,30 +1,107 @@
-from functions.func_train import *
+from functions.func_tasks import *
 
-N_models = 1000
-task = 'workingmemory_delayed-match-to-sample'
-dt = 0.01
-tau = 20*dt
-N = 50
+a = 'relu'
+d = 0
 
-constants = initconstants(dt,tau,N,task)
-tv        = initvariables(task,constants,N_models)
-opt       = tf.optimizers.Adam(learning_rate=1e-3)
-activation= tf.math.tanh
+taskno = int(sys.argv[1])
+skipno = int(sys.argv[2])
+stepno = int(sys.argv[3])
+initno = int(sys.argv[4])
+basictasks = ['go','rtgo','dlygo','anti','rtanti','dlyanti','dm1','ctxdm1','multsendm','dlydm1','ctxdlydm1','multsendlydm','dms','dnms','dmc','dnmc']
+skips = [1,10,20,40,110,120,140]
+steps = [1,2,6,11]
+inits = [0,0.2,0.5,0.8]
+step = steps[stepno]
+skip = skips[skipno]
+init = inits[initno]
+taskname = basictasks[taskno]
 
-#Training with skip connections
-skip = int(sys.argv[1])
-allcosts = []
-allpens = []
+if a == 'relu':
+    activation = tf.nn.relu
+elif a == 'tanh':
+    activation = tf.math.tanh
+elif a == 'sftp':
+    activation = tf.math.softplus
+if d == 0:
+    dale = False
+else:
+    dale = True
 
-for i in range(10):
-    ratio = 0.11*i
-    iterations = 5000
-    costs,penalties = train(constants,tv,task,activation,opt,skip,ratio,iterations,N_models)
-    allcosts.append(costs)
-    allpens.append(penalties)
+N         = 50
+dt        = 0.005
+tau       = 0.1
+N_models  = 100
+constants = initconstants(dt,tau,N,N_models)
+task      = yangtasks(taskname,constants)
 
-allcosts = np.concatenate(allcosts,axis=0)
-allpens = np.concatenate(allpens,axis=0)
 
-np.save('./results/' + str(N_models) + 'models_' + str(int(1000*dt)) + 'ms_' + str(N) + 'N_' + str(skip) + 'skip_costs.npy',allcosts)
-np.save('./results/' + str(N_models) + 'models_' + str(int(1000*dt)) + 'ms_' + str(N) + 'N_' + str(skip) + 'skip_penalties.npy',allpens)
+iterations = 10
+
+allcosts = np.zeros([0,N_models])
+allperfs = np.zeros([0,2,N_models])
+alltimes = []
+counters = []
+
+totalcounter = 0
+currentperf = 0.
+
+for epoch in tf.range(step):
+    
+    if step>1:
+        ratio = tf.constant(init + (1-init)/(step-1)*epoch.numpy(),dtype=tf.float32)
+    else:
+        ratio = tf.constant(1.,dtype=tf.float32)
+
+    counter = 0
+
+    while currentperf < 0.99 and totalcounter<2000 and counter<int(2000/step):
+
+        start = time.time()
+        costs = task.trainmodel(constants,iterations,activation,dale,skip,ratio)
+        timetaken = time.time() - start
+        performanceres,performance,uinf,_ = task.eval(constants,activation,dale)
+        allcosts = np.concatenate([allcosts,costs],axis=0)
+        perfs = np.array([performanceres,performance])[np.newaxis]
+        allperfs = np.concatenate([allperfs,perfs],axis=0)
+        alltimes.append(timetaken)
+
+        counter += 1
+        totalcounter += 1
+
+        currentperfsort = np.sort(performance)
+        currentperf = np.mean(currentperfsort[int(0.1*N_models):int(0.9*N_models)])
+        
+        tf.print(taskno,taskname,'Epoch',epoch,counter,'| Current Performance:',currentperf,'Task:',tf.reduce_mean(performanceres),'Activity:',tf.reduce_mean(uinf),'| Time taken:',timetaken)
+    
+    counters.append(totalcounter)
+
+epoch = step
+counter = 0
+while currentperf < 0.99 and totalcounter<4000:
+    start = time.time()
+    costs = task.trainmodel(constants,iterations,activation,dale,1,1)
+    timetaken = time.time() - start
+    performanceres,performance,uinf,_ = task.eval(constants,activation,dale)
+    allcosts = np.concatenate([allcosts,costs],axis=0)
+    perfs = np.array([performanceres,performance])[np.newaxis]
+    allperfs = np.concatenate([allperfs,perfs],axis=0)
+    alltimes.append(timetaken)
+
+    counter += 1
+    totalcounter += 1
+
+    currentperfsort = np.sort(performance)
+    currentperf = np.mean(currentperfsort[int(0.1*N_models):int(0.9*N_models)])
+    
+    tf.print(taskno,taskname,str(skipno) + str(stepno) + str(initno),'Epoch',epoch,counter,'| Current Performance:',currentperf,'Task:',tf.reduce_mean(performanceres),'Activity:',tf.reduce_mean(uinf),'| Time taken:',timetaken)
+
+counters.append(totalcounter)
+
+np.save('./results/' + taskname + '_' + str(skipno) + str(stepno) + str(initno) + '_Wraw.npy',task.Wraw.numpy())
+np.save('./results/' + taskname + '_' + str(skipno) + str(stepno) + str(initno) + '_bias.npy',task.bias.numpy())
+np.save('./results/' + taskname + '_' + str(skipno) + str(stepno) + str(initno) + '_Winp.npy',task.Winp.numpy())
+np.save('./results/' + taskname + '_' + str(skipno) + str(stepno) + str(initno) + '_Wout.npy',task.Wout.numpy())
+np.save('./results/' + taskname + '_' + str(skipno) + str(stepno) + str(initno) + '_costs.npy',allcosts)
+np.save('./results/' + taskname + '_' + str(skipno) + str(stepno) + str(initno) + '_perfs.npy',allperfs)
+np.save('./results/' + taskname + '_' + str(skipno) + str(stepno) + str(initno) + '_times.npy',alltimes)
+np.save('./results/' + taskname + '_' + str(skipno) + str(stepno) + str(initno) + '_steps.npy',counters)
