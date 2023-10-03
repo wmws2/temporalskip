@@ -40,7 +40,7 @@ for some discretization factor $\theta > 1$. Thereafter, $\theta$ is gradually r
   <img src="/figures/sctt.png" width="600">
 </p>
 
-SCTT similarly confines the well-established idea of skip connections through time to training only~(Figure~\ref{fig:block}C). For some mixing ratio $\beta$, a skip connection between time steps $t$ and $t+\theta$ alters the hidden state as:
+SCTT similarly confines the well-established idea of skip connections through time to training only. For some mixing ratio $\beta$, a skip connection between time steps $t$ and $t+\theta$ alters the hidden state as:
 
 ```math
     \mathbf{r}^\text{SCTT}_{t+\theta\Delta t} \leftarrow (1-\beta) \, \mathbf{r}_{t} + \beta \, \mathbf{r}^\text{base}_{t+\theta\Delta t}
