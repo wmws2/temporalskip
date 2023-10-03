@@ -1,30 +1,25 @@
-from functions.func_rulerev import *
+from functions.func_rulereversaltask import *
 
-typeno = int(sys.argv[1])
-simno = int(sys.argv[2])
+activation  = tf.nn.relu
+dale        = False
+skips       = [1,10,20,40,110,120,140]
+steps       = [1,2,6,11]
+inits       = [0,0.2,0.5,0.8]
 
-skips = [1,10,20,40,110,120,140]
-steps = [1,2,6,11]
-inits = [0,0.2,0.5,0.8]
-a = 'relu'
-d = 0
-if a == 'relu':
-    activation = tf.nn.relu
-elif a == 'tanh':
-    activation = tf.math.tanh
-elif a == 'sftp':
-    activation = tf.math.softplus
-if d == 0:
-    dale = False
-else:
-    dale = True
+typeno      = int(sys.argv[1])
+simno       = int(sys.argv[2])
 
-N         = 50
-dt        = 0.005
-tau       = 0.1
-N_models  = 10
-constants = initconstants(dt,tau,N,N_models)
-task      = rulereversal(constants)
+N           = 50
+dt          = 0.005
+tau         = 0.1
+N_models    = 10
+constants   = initconstants(dt,tau,N,N_models)
+task        = rulereversal(constants)
+iterations  = 10
+allcosts    = np.zeros([0,N_models])
+allperfs    = np.zeros([0,N_models])
+alltimes    = []
+totalcounter= 0
 
 if typeno == 0:
     skip = skips[0]
@@ -56,13 +51,6 @@ if typeno == 7:
     step = steps[0]
     init = inits[0]
     task.type = 3  
-
-
-iterations = 10
-allcosts = np.zeros([0,N_models])
-allperfs = np.zeros([0,N_models])
-alltimes = []
-totalcounter = 0
 
 for epoch in tf.range(step):
     
@@ -99,11 +87,3 @@ while totalcounter<1000:
     tf.print(epoch,counter,'cost',np.mean(costs),'performance',np.mean(perfs),'bestperformance',np.amax(perfs),timetaken)
     counter += 1
     totalcounter += 1
-
-np.save('./resultsrule2/' + str(typeno) + '_' + str(simno) + '_Wraw.npy',task.Wraw.numpy())
-np.save('./resultsrule2/' + str(typeno) + '_' + str(simno) + '_bias.npy',task.bias.numpy())
-np.save('./resultsrule2/' + str(typeno) + '_' + str(simno) + '_Winp.npy',task.Winp.numpy())
-np.save('./resultsrule2/' + str(typeno) + '_' + str(simno) + '_Wout.npy',task.Wout.numpy())
-np.save('./resultsrule2/' + str(typeno) + '_' + str(simno) + '_costs.npy',allcosts)
-np.save('./resultsrule2/' + str(typeno) + '_' + str(simno) + '_perfs.npy',allperfs)
-np.save('./resultsrule2/' + str(typeno) + '_' + str(simno) + '_times.npy',alltimes)

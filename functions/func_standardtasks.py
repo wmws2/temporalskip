@@ -34,24 +34,6 @@ class yangtasks:
         self.opt  = tf.optimizers.Adam(learning_rate=1e-1/constants['N'])
         self.tv   = [self.Winp,self.Wout,self.Wraw,self.bias]
 
-        # if task in self.tasks:
-
-        #     ureg = np.zeros([self.N_models])
-        #     ureg[int(0/4*self.N_models):int(1/4*self.N_models)] = 1e-5
-        #     ureg[int(1/4*self.N_models):int(2/4*self.N_models)] = 1e-3
-        #     ureg[int(2/4*self.N_models):int(3/4*self.N_models)] = 1e-5
-        #     ureg[int(3/4*self.N_models):int(4/4*self.N_models)] = 1e-3
-        #     self.ureg = tf.constant(ureg, dtype=tf.float32)
-
-        #     wreg = np.zeros([self.N_models])
-        #     for i in range(4):
-        #         base = int(i/4*self.N_models)
-        #         wreg[base+int(0/8*self.N_models):base+int(1/8*self.N_models)] = 1e-5
-        #         wreg[base+int(1/8*self.N_models):base+int(2/8*self.N_models)] = 1e-3
-        #     self.wreg = tf.constant(wreg, dtype=tf.float32)
-
-        # elif task in ['multitask']:
-
         self.ureg = 1e-5
         self.wreg = 1e-5        
 
@@ -904,10 +886,6 @@ class yangtasks:
                 readouts.append(readout.numpy())
 
             return trial,np.array(readouts)
-
-
-# graph = self.trainC.get_concrete_function(trial,constants,activation,skip,ratio).graph
-# tf.compat.v1.profiler.profile(graph,options=tf.compat.v1.profiler.ProfileOptionBuilder.float_operation())
 
     def uallA(self,trialA,constants,activation,dale,skip,ratio):
 
