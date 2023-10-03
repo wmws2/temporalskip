@@ -33,7 +33,7 @@ CD begins by training the network with a large step size to support stable gradi
     \mathbf{r}^\text{CD}_{t+\theta\Delta t} \leftarrow \mathbf{r}_{t} + \frac{d\mathbf{r}_t}{dt} \Delta{t} \times \theta
 ```
 
-for some discretization factor $\theta > 1$. Thereafter, $\theta$ is gradually reduced over the course of training until $\theta = 1$ at the end of training, resulting in a reversion to the base model. This annealing process facilitates gradient stability during training by reducing the number of time steps needed to be backpropagated. This is also commonly known as annealing.
+for some discretization factor $\theta > 1$. Thereafter, $\theta$ is gradually reduced over the course of training until $\theta = 1$ at the end of training, resulting in a reversion to the base model. This annealing process facilitates gradient stability during training by reducing the number of time steps needed to be backpropagated. 
 
 **2.3 Skip connection through time (SCTT)** 
 <p align="center">
