@@ -83,14 +83,11 @@ DASC aims to combine the benefits of CD and SCTT while limiting the risk of grad
 * <code>train</code> trains the RNN to perform the task <br>
 * <code>eval</code> computes the true performance of the RNN on the task <br>
 
-Main files
-<code>main_standardtasks</code> converts CIFAR-10 images into a single numpy binary file  <br>
-<code>gsm_1_optimizefilters</code> optimizes for GSM filters by minimizing fraction of variance unexplained   <br>
-<code>gsm_2_constructbank</code> converts optimized parameters into actual filters  <br>
-<code>gsm_3_initialize</code> computes reasonable initial values of GSM parameters  <br>
-
-
-
+**3.1 Main files** 
+<code>main_standardtasks</code> trains RNNs on the main tasks of the paper using the base model, SCTT and DASC  <br>
+* <code>main_standardtasks_cd</code> trains RNNs on the main tasks of the paper using CD  <br>
+* <code>main_rulereversaltask</code> trains RNNs on a rule reversal task using the base model, SCTT and DASC  <br>
+* <code>main_rulereversaltask_cd</code> trains RNNs on a rule reversal task using CD  <br>
 
 ### 4. Citation
 
