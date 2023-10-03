@@ -5,10 +5,20 @@ Code for the paper [Training biologically plausible recurrent neural networks on
 
 ### 2. Methods
 <p align="center">
-  <img src="/figures/control.png" width="600">
+  <img src="/figures/control.png" width="800">
 </p>
 
+<p align="center">
+  <img src="/figures/cd.png" width="800">
+</p>
 
+<p align="center">
+  <img src="/figures/sctt.png" width="800">
+</p>
+
+<p align="center">
+  <img src="/figures/dasc.png" width="800">
+</p>
 
 ### 3. Code
 
