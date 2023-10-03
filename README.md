@@ -1,24 +1,64 @@
 <h2 align="center">Training biologically plausible recurrent neural networks on cognitive tasks with long-term dependencies</h2>
 
 ### 1. Overview
-Code for the paper [Training biologically plausible recurrent neural networks on cognitive tasks with long-term dependencies](https://openreview.net/forum?id=O453PHSthc) as presented in NeurIPS 2023. Gradient instability problems have been ever-present in reucrrent neural network training for decades. Solutions that tackle this problem often involve artificial elements such as gating mechanisms. As such, these solutions cannot be adopted in RNN models that seek to draw comparisons with the brain. This paper presents multiple approaches that involve specialized skip connections through time to support stable RNN training. All models are built on Tensorflow 2.10.
+Code for the paper [Training biologically plausible recurrent neural networks on cognitive tasks with long-term dependencies](https://openreview.net/forum?id=O453PHSthc) as presented in NeurIPS 2023. Gradient instability problems have been ever-present in reucrrent neural network training for decades. Solutions that tackle this problem often involve artificial elements such as gating mechanisms. As such, these solutions cannot be adopted in RNN models that seek to draw comparisons with the brain. This paper presents multiple approaches that involve specialized skip connections through time to support stable RNN training. All models are built on Tensorflow 2.10. In this work, we study continuous-time leaky RNNs described by:
 
+```math
+\mathbf{T}\frac{d\mathbf{r}}{dt} = -\mathbf{r} + f\left( \mathbf{W}_\text{rec}\mathbf{r} + \mathbf{b} + \mathbf{h}_\text{ext} + \boldsymbol{\eta} \right)
+```
 ### 2. Methods
+
+**2.1 Base model** 
 <p align="center">
-  <img src="/figures/control.png" width="800">
+  <img src="/figures/control.png" width="600">
+</p>
+The most common way of training biologically plausible RNNs involves simulating its dynamics using Euler's method for the forward pass:
+
+```math
+\mathbf{r}_{t+\Delta t} \leftarrow \mathbf{r}_{t} + \frac{d\mathbf{r}_t}{dt} \Delta{t}
+```
+Consequently, iterating this over $\theta$ time steps results in:
+
+```math
+    \mathbf{r}^\text{base}_{t+\theta\Delta t} \leftarrow \mathbf{r}_{t} + \sum_{k=0}^{\theta-1}\frac{d\mathbf{r}_{t + k\Delta t}}{dt} \Delta{t}
+```
+
+**2.2 Coarsened discretization (CD)** 
+<p align="center">
+  <img src="/figures/cd.png" width="600">
+</p>
+CD begins by training the network with a large step size to support stable gradients while learning long-term dependencies.
+
+```math
+    \mathbf{r}^\text{CD}_{t+\theta\Delta t} \leftarrow \mathbf{r}_{t} + \frac{d\mathbf{r}_t}{dt} \Delta{t} \times \theta
+```
+
+for some discretization factor $\theta > 1$. Thereafter, $\theta$ is gradually reduced over the course of training until $\theta = 1$ at the end of training, resulting in a reversion to the base model. This annealing process facilitates gradient stability during training by reducing the number of time steps needed to be backpropagated. This is also commonly known as annealing.
+
+**2.3 Skip connection through time (SCTT)** 
+<p align="center">
+  <img src="/figures/sctt.png" width="600">
 </p>
 
-<p align="center">
-  <img src="/figures/cd.png" width="800">
-</p>
+SCTT similarly confines the well-established idea of skip connections through time to training only~(Figure~\ref{fig:block}C). For some mixing ratio $\beta$, a skip connection between time steps $t$ and $t+\theta$ alters the hidden state as:
 
-<p align="center">
-  <img src="/figures/sctt.png" width="800">
-</p>
+```math
+    \mathbf{r}^\text{SCTT}_{t+\theta\Delta t} \leftarrow (1-\beta) \, \mathbf{r}_{t} + \beta \, \mathbf{r}^\text{base}_{t+\theta\Delta t}
+```
 
+The skip length $\theta$ remains unchanged throughout training, while the mixing ratio $0 < \beta \leq 1$ starts at a small value. This provides shortcuts for gradient backpropagation, thus reducing the risk of gradient instability. Similar to CD, the mixing is gradually reduced (i.e. $\beta$ is gradually increased to 1) until we are left with a trained network without skip connections.
+
+**2.4 Dynamics aligned skip connection (DASC)** 
 <p align="center">
-  <img src="/figures/dasc.png" width="800">
+  <img src="/figures/dasc.png" width="600">
 </p>
+We propose an additional method, DASC, which combines the essence of CD with SCTT, in order to respect dynamical properties of the system. DASC achieves this by simulating large time-steps through its skip connections. The skip connections between $t$ and $t+\theta$ alters the hidden state as:
+
+```math
+    \mathbf{r}^\text{DASC}_{t+\theta\Delta t} \leftarrow (1-\beta) \, \mathbf{r}^\text{CD}_{t+\theta\Delta t} + \beta \, \mathbf{r}^\text{base}_{t+\theta\Delta t}
+```
+
+DASC aims to combine the benefits of CD and SCTT while limiting the risk of gradient instability. Unlike CD, DASC simultaneously trains the model with large and appropriately small time steps; unlike SCTT, it mitigates misalignment in the network's dynamics when it mixes hidden state estimates through the paths with and without skip connections. 
 
 ### 3. Code
 
