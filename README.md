@@ -52,6 +52,7 @@ The skip length $\theta$ remains unchanged throughout training, while the mixing
 <p align="center">
   <img src="/figures/dasc.png" width="600">
 </p>
+
 We propose an additional method, DASC, which combines the essence of CD with SCTT, in order to respect dynamical properties of the system. DASC achieves this by simulating large time-steps through its skip connections. The skip connections between $t$ and $t+\theta$ alters the hidden state as:
 
 ```math
@@ -61,6 +62,34 @@ We propose an additional method, DASC, which combines the essence of CD with SCT
 DASC aims to combine the benefits of CD and SCTT while limiting the risk of gradient instability. Unlike CD, DASC simultaneously trains the model with large and appropriately small time steps; unlike SCTT, it mitigates misalignment in the network's dynamics when it mixes hidden state estimates through the paths with and without skip connections. 
 
 ### 3. Code
+
+**3.1 Function files** 
+
+<code>func_init</code> <br>
+* <code>initconstants</code> creates a dictionary of simulation constants <br>
+* <code>compute_dueta</code> simulates the dynamics of the RNN by one time step <br>
+* <code>compute_uall</code> simulates the dynamics of the RNN across a prefined number of time steps with options to include SCTT or DASC <br>
+
+<code>func_standardtasks</code> contains a class which implements the main tasks of the paper (<code>X</code> = <code>A</code>, <code>B</code> or <code>C</code>)<br>
+* <code>construct_ringinput</code> constructs the RNN input given the angle and modality of the stimulus <br>
+* <code>construct_ringangle</code> computes the readout angle based on the RNN output <br>
+* <code>construct_trialX</code> constructs the RNN inputs and targets for tasks with trial structure <code>X</code> <br>
+* <code>trainX</code> trains the RNN to perform a task with trial structure <code>X</code> <br>
+* <code>evalX</code> computes the true performance of the RNN on a task with trial structure <code>X</code> <br>
+* <code>uallX</code> records the neural activity of the RNN for some specific task <br>
+
+<code>func_rulereversaltask</code> contains a class which implements the rule reversal task in the later sections of the paper <br>
+* <code>construct_trial</code> constructs the RNN inputs and targets of the task <br>
+* <code>train</code> trains the RNN to perform the task <br>
+* <code>eval</code> computes the true performance of the RNN on the task <br>
+
+Main files
+<code>main_standardtasks</code> converts CIFAR-10 images into a single numpy binary file  <br>
+<code>gsm_1_optimizefilters</code> optimizes for GSM filters by minimizing fraction of variance unexplained   <br>
+<code>gsm_2_constructbank</code> converts optimized parameters into actual filters  <br>
+<code>gsm_3_initialize</code> computes reasonable initial values of GSM parameters  <br>
+
+
 
 
 ### 4. Citation
