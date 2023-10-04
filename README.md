@@ -65,12 +65,12 @@ DASC aims to combine the benefits of CD and SCTT while limiting the risk of grad
 
 **3.1 Function files** 
 
-<code>func_init</code> <br>
+<code>func_init.py</code> <br>
 * <code>initconstants</code> creates a dictionary of simulation constants <br>
 * <code>compute_dueta</code> simulates the dynamics of the RNN by one time step <br>
 * <code>compute_uall</code> simulates the dynamics of the RNN across a prefined number of time steps with options to include SCTT or DASC <br>
 
-<code>func_standardtasks</code> contains a class which implements the main tasks of the paper (<code>X</code> = <code>A</code>, <code>B</code> or <code>C</code>)<br>
+<code>func_standardtasks.py</code> contains a class which implements the main tasks of the paper (<code>X</code> = <code>A</code>, <code>B</code> or <code>C</code>)<br>
 * <code>construct_ringinput</code> constructs the RNN input given the angle and modality of the stimulus <br>
 * <code>construct_ringangle</code> computes the readout angle based on the RNN output <br>
 * <code>construct_trialX</code> constructs the RNN inputs and targets for tasks with trial structure <code>X</code> <br>
@@ -78,16 +78,16 @@ DASC aims to combine the benefits of CD and SCTT while limiting the risk of grad
 * <code>evalX</code> computes the true performance of the RNN on a task with trial structure <code>X</code> <br>
 * <code>uallX</code> records the neural activity of the RNN for some specific task <br>
 
-<code>func_rulereversaltask</code> contains a class which implements the rule reversal task in the later sections of the paper <br>
+<code>func_rulereversaltask.py</code> contains a class which implements the rule reversal task in the later sections of the paper <br>
 * <code>construct_trial</code> constructs the RNN inputs and targets of the task <br>
 * <code>train</code> trains the RNN to perform the task <br>
 * <code>eval</code> computes the true performance of the RNN on the task <br>
 
 **3.1 Main files**  <br>
-* <code>main_standardtasks</code> trains RNNs on the main tasks of the paper using the base model, SCTT and DASC  <br>
-* <code>main_standardtasks_cd</code> trains RNNs on the main tasks of the paper using CD  <br>
-* <code>main_rulereversaltask</code> trains RNNs on a rule reversal task using the base model, SCTT and DASC  <br>
-* <code>main_rulereversaltask_cd</code> trains RNNs on a rule reversal task using CD  <br>
+* <code>main_standardtasks.py</code> trains RNNs on the main tasks of the paper using the base model, SCTT and DASC  <br>
+* <code>main_standardtasks_cd.py</code> trains RNNs on the main tasks of the paper using CD  <br>
+* <code>main_rulereversaltask.py</code> trains RNNs on a rule reversal task using the base model, SCTT and DASC  <br>
+* <code>main_rulereversaltask_cd.py</code> trains RNNs on a rule reversal task using CD  <br>
 
 ### 4. Citation
 
