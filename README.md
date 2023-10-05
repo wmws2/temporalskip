@@ -1,7 +1,7 @@
 <h2 align="center">Training biologically plausible recurrent neural networks on cognitive tasks with long-term dependencies</h2>
 
 ### 1. Overview
-Code for the paper [Training biologically plausible recurrent neural networks on cognitive tasks with long-term dependencies](https://openreview.net/forum?id=O453PHSthc) as presented in NeurIPS 2023. Gradient instability problems have been ever-present in reucrrent neural network training for decades. Solutions that tackle this problem often involve artificial elements such as gating mechanisms. As such, these solutions cannot be adopted in RNN models that seek to draw comparisons with the brain. This paper presents multiple approaches that involve specialized skip connections through time to support stable RNN training. All models are built on Tensorflow 2.10. In this work, we study continuous-time leaky RNNs described by:
+Code for the paper [Training biologically plausible recurrent neural networks on cognitive tasks with long-term dependencies](https://openreview.net/forum?id=O453PHSthc) as presented in NeurIPS 2023. Gradient instability problems have been ever-present in recurrent neural network training for decades. Solutions that tackle this problem often involve artificial elements such as gating mechanisms. As such, these solutions cannot be adopted in RNN models that seek to draw comparisons with the brain. This paper presents multiple approaches that involve specialized skip connections through time to support stable RNN training. All models are built with Tensorflow 2.10. In this work, we study continuous-time leaky RNNs described by:
 
 ```math
 \mathbf{T}\frac{d\mathbf{r}}{dt} = -\mathbf{r} + f\left( \mathbf{W}_\text{rec}\mathbf{r} + \mathbf{b} + \mathbf{h}_\text{ext} + \boldsymbol{\eta} \right)
@@ -33,7 +33,7 @@ CD begins by training the network with a large step size to support stable gradi
     \mathbf{r}^\text{CD}_{t+\theta\Delta t} \leftarrow \mathbf{r}_{t} + \frac{d\mathbf{r}_t}{dt} \Delta{t} \times \theta
 ```
 
-for some discretization factor $\theta > 1$. Thereafter, $\theta$ is gradually reduced over the course of training until $\theta = 1$ at the end of training, resulting in a reversion to the base model. This annealing process facilitates gradient stability during training by reducing the number of time steps needed to be backpropagated. 
+for some discretization factor $\theta > 1$. Thereafter, $\theta$ is gradually reduced over the course of training until $\theta = 1$ at the end of training, resulting in a reversion to the base model. This coarsening process facilitates gradient stability during training by reducing the number of time steps needed to be backpropagated. 
 
 **2.3 Skip connection through time (SCTT)** 
 <p align="center">
