@@ -83,7 +83,7 @@ DASC aims to combine the benefits of CD and SCTT while limiting the risk of grad
 * <code>train</code> trains the RNN to perform the task <br>
 * <code>eval</code> computes the true performance of the RNN on the task <br>
 
-**3.1 Main files**  <br>
+**3.2 Main files**  <br>
 * <code>main_standardtasks.py</code> trains RNNs on the main tasks of the paper using the base model, SCTT and DASC  <br>
 * <code>main_standardtasks_cd.py</code> trains RNNs on the main tasks of the paper using CD  <br>
 * <code>main_rulereversaltask.py</code> trains RNNs on a rule reversal task using the base model, SCTT and DASC  <br>
