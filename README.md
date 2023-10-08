@@ -27,7 +27,7 @@ Consequently, iterating this over $\theta$ time steps results in:
 <p align="center">
   <img src="/figures/cd.png" width="600">
 </p>
-CD begins by training the network with a large step size to support stable gradients while learning long-term dependencies.
+CD begins by training the network with a large step size to support stable gradients while learning long-term dependencies:
 
 ```math
     \mathbf{r}^\text{CD}_{t+\theta\Delta t} \leftarrow \mathbf{r}_{t} + \frac{d\mathbf{r}_t}{dt} \Delta{t} \times \theta
