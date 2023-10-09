@@ -76,7 +76,7 @@ DASC aims to combine the benefits of CD and SCTT while limiting the risk of grad
 * <code>construct_trialX</code> constructs the RNN inputs and targets for tasks with trial structure <code>X</code> <br>
 * <code>trainX</code> trains the RNN to perform a task with trial structure <code>X</code> <br>
 * <code>evalX</code> computes the true performance of the RNN on a task with trial structure <code>X</code> <br>
-* <code>uallX</code> records the neural activity of the RNN for some specific task <br>
+* <code>uallX</code> records the neural activity of the RNN for some task with trial structure <code>X</code> <br>
 
 <code>func_rulereversaltask.py</code> contains a class which implements the rule reversal task in the later sections of the paper <br>
 * <code>construct_trial</code> constructs the RNN inputs and targets of the task <br>
