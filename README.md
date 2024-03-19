@@ -95,12 +95,12 @@ DASC aims to combine the benefits of CD and SCTT while limiting the risk of grad
 @inproceedings{soo2023temporalskip,
  author = {Soo, Wayne W.M. and Goudar, Vishwa and Wang, Xiao-Jing},
  booktitle = {Advances in Neural Information Processing Systems},
- editor = {TBD},
- pages = {TBD},
+ editor = {A. Oh and T. Neumann and A. Globerson and K. Saenko and M. Hardt and S. Levine},
+ pages = {32061--32074},
  publisher = {Curran Associates, Inc.},
  title = {Training biologically plausible recurrent neural networks on cognitive tasks with long-term dependencies},
- url = {TBD},
- volume = {TBD},
+ url = {https://proceedings.neurips.cc/paper_files/paper/2023/file/65ccdfe02045fa0b823c5fa7ffd56b66-Paper-Conference.pdf},
+ volume = {36},
  year = {2023}
 }
 ```
