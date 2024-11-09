@@ -92,7 +92,7 @@ DASC aims to combine the benefits of CD and SCTT while limiting the risk of grad
 ### 4. Citation
 
 ```
-@inproceedings{soo2023temporalskip,
+@inproceedings{soo2023training,
  author = {Soo, Wayne W.M. and Goudar, Vishwa and Wang, Xiao-Jing},
  booktitle = {Advances in Neural Information Processing Systems},
  editor = {A. Oh and T. Neumann and A. Globerson and K. Saenko and M. Hardt and S. Levine},
